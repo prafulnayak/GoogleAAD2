@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="switch_preference"
+        android:summary="Turn this option on or off"
+        android:title="Switch preference" />
+    <PreferenceCategory
+        android:summary="Username and password information"
+        android:title="Settings" >
+        <CheckBoxPreference
+            android:key="checkBox"
+            android:summary="On/Off"
+            android:title="Keep me logged in" />
+
+        <ListPreference
+            android:entries="@array/listOptions"
+            android:entryValues="@array/listValues"
+            android:key="listpref"
+            android:summary="List preference example"
+            android:title="List preference" />
+    </PreferenceCategory>
+</PreferenceScreen>

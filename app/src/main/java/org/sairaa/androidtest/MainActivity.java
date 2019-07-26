@@ -3,6 +3,7 @@ package org.sairaa.androidtest;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +17,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -56,6 +58,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button scheduleJobButton;
     private Button cancelJobButton;
 
+    private Button settingPrefButton;
+    private String sharedPrefFile =
+            "org.sairaa.android.hellosharedprefs";
+    private SharedPreferences mPreferences;
+
     private List<String> stringList = new ArrayList<>();
 
     @Override
@@ -85,6 +92,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         update.setOnClickListener(this);
         cancel.setOnClickListener(this);
+
+        settingPrefButton = findViewById(R.id.setting);
+        settingPrefButton.setOnClickListener(this);
+
+        PreferenceManager.setDefaultValues(MainActivity.this,R.xml.preference,false);
+
+        sharedPrefreanceValue();
 
         scheduleJobButton = findViewById(R.id.schedule_job);
         scheduleJobButton.setOnClickListener(this);
@@ -128,9 +142,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    private void sharedPrefreanceValue() {
+//        SharedPreferences sharedPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+////                PreferenceManager.getDefaultSharedPreferences(this);
+//        String listPrefs = sharedPreferences.getString("listpref", "Default list prefs");
+//        Toast.makeText(this, ""+listPrefs, Toast.LENGTH_SHORT).show();
+
+        SharedPreferences sharedPref =
+                PreferenceManager
+                        .getDefaultSharedPreferences(MainActivity.this);
+        Boolean switchPref = sharedPref.getBoolean
+                (SettingActivity.KEY_PREF_EXAMPLE_SWITCH, false);
+
+        //uncomment this to get toast of boolean
+
+//        Toast.makeText(this, switchPref.toString(),
+//                Toast.LENGTH_SHORT).show();
+
+        String listPrefs = sharedPref.getString(SettingActivity.KEY_LIST_PREF, "Default list prefs");
+        Toast.makeText(this, ""+listPrefs, Toast.LENGTH_SHORT).show();
+
+    }
+
     private int caluclate(int a, int b) {
         return calculator.add(a,b);
 
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // Save the scores.
+//        outState.putInt(STATE_SCORE_1, Integer.parseInt(number1.getText().toString().trim()));
+//        outState.putInt(STATE_SCORE_2, Integer.parseInt(number2.getText().toString().trim()));
+        super.onSaveInstanceState(outState);
     }
 
 
@@ -159,6 +202,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.cancel_job:
                 cancelJob();
+                break;
+            case R.id.setting:
+                Intent intent = new Intent(this,SettingActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 
